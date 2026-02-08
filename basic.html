@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!--
+    Author: Jeremy Lockhart
+    Date: 02/08/2026
+    Purpose: This exercise builds a simple personal portfolio page using semantic HTML
+             (header, nav, main, section) and a contact form. It also practices basic
+             JavaScript by prompting the user for their name and updating a welcome
+             message on the page using DOM manipulation.
+  -->
+
+  <meta charset="utf-8" />
+  <!-- Ensures proper scaling and layout on mobile devices -->
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+  <title>Personal Portfolio</title>
+
+  <!-- Optional: link to an external stylesheet if your course folder includes one -->
+  <!-- <link rel="stylesheet" href="styles.css" /> -->
+</head>
+
+<body>
+  <header>
+    <h1>Jeremy Lockhart - Personal Portfolio</h1>
+
+    <!-- This message is updated dynamically with JavaScript -->
+    <p id="welcomeMsg">Welcome!</p>
+
+    <!-- Simple navigation menu linking to three sections -->
+    <nav>
+      <a href="#about">About</a> |
+      <a href="#projects">Projects</a> |
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- About section -->
+    <section id="about">
+      <h2>About</h2>
+      <p>
+        Hi, I’m Jeremy Lockhart. I work in IT and I’m currently finishing my BS in
+        Computer & Information Systems with a focus on cybersecurity. I enjoy building
+        projects that help me practice real-world skills like problem solving,
+        scripting, and web development.
+      </p>
+    </section>
+
+    <!-- Projects section -->
+    <section id="projects">
+      <h2>Projects</h2>
+      <p>
+        Here are a few projects. If you don’t have GitHub links ready yet, leave the
+        placeholders for now and update the href values later.
+      </p>
+
+      <!-- Image links to three GitHub projects (placeholders included) -->
+      <a href="https://github.com/your-username/project1" target="_blank">
+        <img
+          src="https://via.placeholder.com/300x200?text=Project+1"
+          alt="Project 1 link"
+        />
+      </a>
+
+      <a href="https://github.com/your-username/project2" target="_blank">
+        <img
+          src="https://via.placeholder.com/300x200?text=Project+2"
+          alt="Project 2 link"
+        />
+      </a>
+
+      <a href="https://github.com/your-username/project3" target="_blank">
+        <img
+          src="https://via.placeholder.com/300x200?text=Project+3"
+          alt="Project 3 link"
+        />
+      </a>
+    </section>
+
+    <!-- Contact section -->
+    <section id="contact">
+      <h2>Contact</h2>
+      <p>Send me a message using the form below.</p>
+
+      <form>
+        <label for="senderName">
+          Sender Name
+          <input type="text" id="senderName" name="senderName" />
+        </label>
+
+        <label for="senderEmail">
+          Email Address
+          <input type="email" id="senderEmail" name="senderEmail" />
+        </label>
+
+        <label for="subject">
+          Subject
+          <input type="text" id="subject" name="subject" />
+        </label>
+
+        <label for="message">
+          Message
+          <textarea id="message" name="message" rows="5" cols="30"></textarea>
+        </label>
+
+        <input type="submit" id="submit" value="Submit" />
+      </form>
+    </section>
+  </main>
+
+  <script>
+    // Prompt the user for their name and store it in a variable
+    var userName = prompt("What is your name?");
+
+    // Dynamically update the message at the top of the page using the DOM
+    // (Using getElementById() is the same DOM technique used in your guided practices.) 
+    if (userName && userName.trim().length > 0) {
+      document.getElementById("welcomeMsg").innerText = "Welcome, " + userName + "!";
+    } else {
+      document.getElementById("welcomeMsg").innerText = "Welcome!";
+    }
+  </script>
+</body>
+</html>
