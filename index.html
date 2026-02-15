@@ -3,123 +3,257 @@
 <head>
   <!--
     Author: Jeremy Lockhart
-    Date: 02/08/2026
-    Purpose: This exercise builds a simple personal portfolio page using semantic HTML
-             (header, nav, main, section) and a contact form. It also practices basic
-             JavaScript by prompting the user for their name and updating a welcome
-             message on the page using DOM manipulation.
+    Date: 02/15/2026
+    Assignment: Interactive Portfolio Update
+    Purpose:
+      - Add conditional Featured Content section
+      - Generate skills using a loop
+      - Add Dark Mode toggle
+      - Add interactive form submission
   -->
 
   <meta charset="utf-8" />
-  <!-- Ensures proper scaling and layout on mobile devices -->
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jeremy Lockhart - Interactive Portfolio</title>
 
-  <title>Personal Portfolio</title>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      margin: 0;
+      line-height: 1.5;
+    }
 
-  <!-- Optional: link to an external stylesheet if your course folder includes one -->
-  <!-- <link rel="stylesheet" href="styles.css" /> -->
+    header {
+      padding: 16px;
+      border-bottom: 1px solid #ccc;
+    }
+
+    nav a {
+      text-decoration: none;
+      margin-right: 10px;
+    }
+
+    main {
+      padding: 16px;
+    }
+
+    section {
+      margin-bottom: 28px;
+    }
+
+    #featuredContent .featuredBox {
+      border: 2px solid #777;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 8px;
+      background-color: #f2f2f2;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* Dark Mode */
+    .dark-mode {
+      background: #111;
+      color: #f5f5f5;
+    }
+
+    .dark-mode header {
+      border-bottom: 1px solid #444;
+    }
+
+    .dark-mode a {
+      color: #9bd3ff;
+    }
+
+    .dark-mode #featuredContent .featuredBox {
+      background-color: #1f1f1f;
+      border-color: #aaa;
+    }
+
+    .dark-mode input,
+    .dark-mode textarea {
+      background: #1b1b1b;
+      color: #f5f5f5;
+      border: 1px solid #555;
+    }
+
+    img {
+      max-width: 300px;
+      margin-right: 10px;
+      margin-bottom: 10px;
+    }
+  </style>
 </head>
 
 <body>
-  <header>
-    <h1>Jeremy Lockhart - Personal Portfolio</h1>
 
-    <!-- This message is updated dynamically with JavaScript -->
-    <p id="welcomeMsg">Welcome!</p>
+<header>
+  <label>
+    <input type="checkbox" id="darkToggle">
+    Dark Mode
+  </label>
 
-    <!-- Simple navigation menu linking to three sections -->
-    <nav>
-      <a href="#about">About</a> |
-      <a href="#projects">Projects</a> |
-      <a href="#contact">Contact</a>
-    </nav>
-  </header>
+  <h1>Jeremy Lockhart - Personal Portfolio</h1>
+  <p id="welcomeMsg">Welcome!</p>
 
-  <main>
-    <!-- About section -->
-    <section id="about">
-      <h2>About</h2>
+  <nav>
+    <a href="#about">About</a>
+    <a href="#projects">Projects</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ABOUT SECTION -->
+  <section id="about">
+    <h2>About</h2>
+    <p>
+      I am an IT professional and Cloud Engineer with experience in
+      infrastructure, cybersecurity, and systems analysis.
+      I am currently completing my BS in Computer & Information Systems.
+    </p>
+
+    <h3>Skills / Technologies</h3>
+    <ul id="skillsList"></ul>
+  </section>
+
+  <!-- FEATURED CONTENT -->
+  <section id="featuredContent">
+    <h2>Featured Content</h2>
+
+    <div id="universityResources" class="featuredBox">
+      <h3>University Resources</h3>
       <p>
-        Hi, I’m Jeremy Lockhart. I work in IT and I’m currently finishing my BS in
-        Computer & Information Systems with a focus on cybersecurity. I enjoy building
-        projects that help me practice real-world skills like problem solving,
-        scripting, and web development.
+        <a href="https://media.ecpi.net/lor/documents/Canvas/UniversityResources.html"
+           target="_blank">
+          ECPI University Resources Page
+        </a>
       </p>
-    </section>
+    </div>
 
-    <!-- Projects section -->
-    <section id="projects">
-      <h2>Projects</h2>
-      <p>
-        Here are a few projects. If you don’t have GitHub links ready yet, leave the
-        placeholders for now and update the href values later.
-      </p>
+    <div id="personalProjects" class="featuredBox">
+      <h3>Personal Projects</h3>
 
-      <!-- Image links to three GitHub projects (placeholders included) -->
-      <a href="https://github.com/your-username/project1" target="_blank">
-        <img
-          src="https://via.placeholder.com/300x200?text=Project+1"
-          alt="Project 1 link"
-        />
+      <!-- GitHub Profile -->
+      <a href="https://github.com/jlockhart5393" target="_blank">
+        <img src="https://via.placeholder.com/300x200?text=GitHub+Profile"
+             alt="GitHub Profile">
       </a>
 
-      <a href="https://github.com/your-username/project2" target="_blank">
-        <img
-          src="https://via.placeholder.com/300x200?text=Project+2"
-          alt="Project 2 link"
-        />
+      <!-- GitHub Pages Repository -->
+      <a href="https://github.com/jlockhart5393/jlockhart5393.github.io" target="_blank">
+        <img src="https://via.placeholder.com/300x200?text=Portfolio+Project"
+             alt="GitHub Pages Portfolio Project">
       </a>
+    </div>
+  </section>
 
-      <a href="https://github.com/your-username/project3" target="_blank">
-        <img
-          src="https://via.placeholder.com/300x200?text=Project+3"
-          alt="Project 3 link"
-        />
-      </a>
-    </section>
+  <!-- PROJECTS -->
+  <section id="projects">
+    <h2>Projects</h2>
 
-    <!-- Contact section -->
-    <section id="contact">
-      <h2>Contact</h2>
-      <p>Send me a message using the form below.</p>
+    <a href="https://github.com/jlockhart5393/jlockhart5393.github.io" target="_blank">
+      <img src="https://via.placeholder.com/300x200?text=Portfolio+Project"
+           alt="Portfolio Project">
+    </a>
 
-      <form>
-        <label for="senderName">
-          Sender Name
-          <input type="text" id="senderName" name="senderName" />
-        </label>
+    <a href="https://github.com/jlockhart5393" target="_blank">
+      <img src="https://via.placeholder.com/300x200?text=GitHub+Profile"
+           alt="GitHub Profile">
+    </a>
+  </section>
 
-        <label for="senderEmail">
-          Email Address
-          <input type="email" id="senderEmail" name="senderEmail" />
-        </label>
+  <!-- CONTACT -->
+  <section id="contact">
+    <h2>Contact</h2>
 
-        <label for="subject">
-          Subject
-          <input type="text" id="subject" name="subject" />
-        </label>
+    <form>
+      <label>
+        Name:
+        <input type="text" id="senderName">
+      </label>
+      <br><br>
 
-        <label for="message">
-          Message
-          <textarea id="message" name="message" rows="5" cols="30"></textarea>
-        </label>
+      <label>
+        Email:
+        <input type="email" id="senderEmail">
+      </label>
+      <br><br>
 
-        <input type="submit" id="submit" value="Submit" />
-      </form>
-    </section>
-  </main>
+      <label>
+        Message:
+        <br>
+        <textarea id="message" rows="5"></textarea>
+      </label>
+      <br><br>
 
-  <script>
-    // Prompt the user for their name and store it in a variable
-    var userName = prompt("What is your name?");
+      <input type="submit" id="submit" value="Submit">
+    </form>
+  </section>
 
-    // Dynamically update the message at the top of the page using the DOM
-    // (Using getElementById() is the same DOM technique used in your guided practices.) 
-    if (userName && userName.trim().length > 0) {
-      document.getElementById("welcomeMsg").innerText = "Welcome, " + userName + "!";
-    } else {
-      document.getElementById("welcomeMsg").innerText = "Welcome!";
-    }
-  </script>
+</main>
+
+<script>
+  /* Welcome Prompt */
+  var userName = prompt("What is your name?");
+  if (userName && userName.trim().length > 0) {
+    document.getElementById("welcomeMsg").innerText =
+      "Welcome, " + userName + "!";
+  }
+
+  /* Skills Array + Loop */
+  var skills = ["HTML", "CSS", "JavaScript", "Git", "GitHub"];
+  var skillsHTML = "";
+
+  for (var i = 0; i < skills.length; i++) {
+    skillsHTML += "<li>" + skills[i] + "</li>";
+  }
+
+  document.getElementById("skillsList").innerHTML = skillsHTML;
+
+  /* Conditional Featured Content */
+  var projectLinks =
+    document.getElementById("projects")
+    .getElementsByTagName("a");
+
+  var projectCount = projectLinks.length;
+
+  var uniDiv = document.getElementById("universityResources");
+  var personalDiv = document.getElementById("personalProjects");
+
+  if (projectCount < 3) {
+    uniDiv.classList.remove("hidden");
+    personalDiv.classList.remove("hidden");
+  } else {
+    uniDiv.classList.add("hidden");
+    personalDiv.classList.remove("hidden");
+  }
+
+  /* Dark Mode */
+  document.getElementById("darkToggle")
+    .addEventListener("change", function () {
+      document.body.classList.toggle("dark-mode");
+    });
+
+  /* Contact Form */
+  document.getElementById("submit")
+    .addEventListener("click", function (event) {
+      event.preventDefault();
+
+      var name =
+        document.getElementById("senderName").value;
+
+      if (!name || name.trim().length === 0) {
+        name = "there";
+      }
+
+      alert("Thank you, " + name +
+            ", your message has been sent!");
+    });
+</script>
+
 </body>
 </html>
