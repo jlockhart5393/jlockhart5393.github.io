@@ -7,13 +7,10 @@
     Assignment: Interactive Portfolio Update
 
     Purpose:
-      - Make my portfolio more interactive
-      - Add new content to the page using JavaScript
-      - Change some existing sections using selectors
-      - Show a fake “sending message…” delay when the form is submitted
-      - Show a welcome modal on page load
-      - Add a tooltip to the submit button
-      - Save dark mode preference using localStorage
+    - Replace prompt with a welcome modal
+    - Add tooltip to submit button
+    - Save dark mode preference
+    - Improve structure using external JavaScript file
   -->
 
   <meta charset="utf-8">
@@ -21,7 +18,6 @@
   <title>Jeremy Lockhart - Interactive Portfolio</title>
 
   <style>
-    /* Basic page styling */
     body {
       font-family: Arial, Helvetica, sans-serif;
       margin: 0;
@@ -41,29 +37,24 @@
       margin-bottom: 28px;
     }
 
-    /* This bar gets added dynamically after a delay */
     .notifyBar {
       padding: 10px 16px;
       border-bottom: 1px solid #ccc;
       background: #fff8d6;
     }
 
-    /* Used for the new paragraph we add with JS */
     .highlightBox {
       border: 2px dashed #777;
       padding: 10px;
       border-radius: 8px;
     }
 
-    /* Simple dark mode styling */
     .dark-mode {
       background: #111;
       color: #f5f5f5;
     }
 
-    /* =========================
-       Welcome Modal (Overlay)
-       ========================= */
+    /* Modal */
     .modalOverlay {
       position: fixed;
       top: 0;
@@ -78,32 +69,19 @@
     }
 
     .modalBox {
-      background: #ffffff;
+      background: #fff;
+      padding: 20px;
       border-radius: 10px;
-      padding: 18px;
       width: 90%;
-      max-width: 420px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+      max-width: 400px;
       text-align: center;
-    }
-
-    .modalBox h2 {
-      margin-top: 0;
-    }
-
-    .modalBox button {
-      margin-top: 12px;
-      padding: 10px 14px;
-      cursor: pointer;
     }
 
     .hidden {
       display: none;
     }
 
-    /* =========================
-       Tooltip for Submit Button
-       ========================= */
+    /* Tooltip */
     .tipWrap {
       position: relative;
       display: inline-block;
@@ -112,20 +90,17 @@
     .tipWrap .tipText {
       visibility: hidden;
       opacity: 0;
-      transition: opacity 0.15s ease-in-out;
-
+      transition: opacity 0.2s;
       position: absolute;
-      bottom: 135%;
+      bottom: 130%;
       left: 50%;
       transform: translateX(-50%);
-
       background: #333;
       color: #fff;
       padding: 6px 10px;
       border-radius: 6px;
       white-space: nowrap;
       font-size: 0.9em;
-      z-index: 10;
     }
 
     .tipWrap:hover .tipText {
@@ -138,19 +113,17 @@
 <body>
 
 <header>
-  <!-- Dark mode checkbox -->
   <label>
     <input type="checkbox" id="darkToggle">
     Dark Mode
   </label>
 
   <h1>Jeremy Lockhart - Personal Portfolio</h1>
-  <p id="welcomeMsg">Welcome!</p>
+  <p>Welcome!</p>
 </header>
 
 <main>
 
-  <!-- ABOUT SECTION -->
   <section id="about">
     <h2>About</h2>
     <p>
@@ -158,12 +131,10 @@
     </p>
   </section>
 
-  <!-- PROJECTS SECTION -->
   <section id="projects">
     <h2>Projects</h2>
   </section>
 
-  <!-- CONTACT SECTION -->
   <section id="contact">
     <h2>Contact</h2>
 
@@ -187,9 +158,8 @@
       </label>
       <br><br>
 
-      <!-- Tooltip wrapper -->
       <span class="tipWrap">
-        <input type="submit" id="submitBtn" value="Submit">
+        <input type="submit" value="Submit">
         <span class="tipText">Click to send your message!</span>
       </span>
     </form>
@@ -197,18 +167,17 @@
 
 </main>
 
-<!-- =========================
-     Welcome Modal HTML
-     ========================= -->
+<!-- Welcome Modal -->
 <div id="welcomeModal" class="modalOverlay hidden">
   <div class="modalBox">
-    <h2>Heads up</h2>
+    <h2>Heads Up</h2>
     <p>This page is a work in progress.</p>
-    <button id="closeModalBtn" type="button">Close</button>
+    <button id="closeModalBtn">Close</button>
   </div>
 </div>
 
-<!-- External JS file (matches the technique from the PDF) -->
-<script src="script.js"></script>
+<!-- External JavaScript -->
+<script src="4.8script.js"></script>
+
 </body>
 </html>
