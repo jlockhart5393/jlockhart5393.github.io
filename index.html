@@ -2,30 +2,26 @@
 <html lang="en">
 <head>
   <!--
-    Author: Jeremy Lockhart
+    Name: Jeremy Lockhart
     Date: 03-01-2026
-    Assignment: Interactive Portfolio Update
+    Assignment: Portfolio with Custom Objects
 
     Purpose:
-      - Make my portfolio more interactive
-      - Add new content to the page using JavaScript
-      - Change some existing sections using selectors
-      - Show a fake “sending message…” delay when the form is submitted
-      - Show a welcome modal on page load
-      - Add a tooltip to the submit button
-      - Save dark mode preference using localStorage
+    - Store project objects
+    - Save them using sessionStorage
+    - Load and display them dynamically
+    - Keep projects in rows of 6
   -->
 
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jeremy Lockhart - Interactive Portfolio</title>
+  <title>Jeremy Lockhart Portfolio</title>
 
   <style>
-    /* Basic page styling */
     body {
-      font-family: Arial, Helvetica, sans-serif;
+      font-family: Arial, sans-serif;
       margin: 0;
-      line-height: 1.5;
+      padding: 0;
     }
 
     header {
@@ -35,34 +31,100 @@
 
     main {
       padding: 16px;
+      max-width: 1400px; /* widened so 6 cards fit */
+      margin-left: 0;
+      margin-right: auto;
     }
 
     section {
-      margin-bottom: 28px;
+      margin-bottom: 30px;
+      text-align: left;
     }
 
-    /* This bar gets added dynamically after a delay */
-    .notifyBar {
-      padding: 10px 16px;
-      border-bottom: 1px solid #ccc;
-      background: #fff8d6;
+    /* =========================
+       Projects Styling (6 per row)
+       ========================= */
+    .projectGrid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 15px;
     }
 
-    /* Used for the new paragraph we add with JS */
-    .highlightBox {
-      border: 2px dashed #777;
-      padding: 10px;
+    .projectCard {
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 12px;
+      text-align: left;
+    }
+
+    .projectCard img {
+      width: 60px;
+      height: 60px;
       border-radius: 8px;
     }
 
-    /* Simple dark mode styling */
+    .projectLink {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 6px 10px;
+      border: 1px solid #444;
+      border-radius: 6px;
+      text-decoration: none;
+    }
+
+    /* =========================
+       Form Styling
+       ========================= */
+    form div {
+      margin-bottom: 12px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 4px;
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    textarea {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #aaa;
+      border-radius: 6px;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    button {
+      padding: 8px 14px;
+      border-radius: 6px;
+      border: 1px solid #444;
+      cursor: pointer;
+    }
+
+    /* =========================
+       Dark Mode
+       ========================= */
     .dark-mode {
       background: #111;
       color: #f5f5f5;
     }
 
+    .dark-mode input,
+    .dark-mode textarea {
+      background: #222;
+      color: #f5f5f5;
+      border: 1px solid #555;
+    }
+
     /* =========================
-       Welcome Modal (Overlay)
+       Modal
        ========================= */
     .modalOverlay {
       position: fixed;
@@ -70,145 +132,105 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.55);
+      background: rgba(0,0,0,0.6);
       display: flex;
-      align-items: center;
       justify-content: center;
-      z-index: 9999;
+      align-items: center;
     }
 
     .modalBox {
-      background: #ffffff;
+      background: white;
+      padding: 20px;
       border-radius: 10px;
-      padding: 18px;
-      width: 90%;
-      max-width: 420px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-      text-align: center;
-    }
-
-    .modalBox h2 {
-      margin-top: 0;
-    }
-
-    .modalBox button {
-      margin-top: 12px;
-      padding: 10px 14px;
-      cursor: pointer;
-    }
-
-    .hidden {
-      display: none;
+      width: 300px;
     }
 
     /* =========================
-       Tooltip for Submit Button
+       Tooltip
        ========================= */
-    .tipWrap {
+    .tooltip {
       position: relative;
       display: inline-block;
     }
 
-    .tipWrap .tipText {
+    .tooltipText {
       visibility: hidden;
-      opacity: 0;
-      transition: opacity 0.15s ease-in-out;
-
-      position: absolute;
-      bottom: 135%;
-      left: 50%;
-      transform: translateX(-50%);
-
-      background: #333;
-      color: #fff;
-      padding: 6px 10px;
+      background: black;
+      color: white;
+      padding: 5px;
       border-radius: 6px;
-      white-space: nowrap;
-      font-size: 0.9em;
-      z-index: 10;
+      position: absolute;
+      bottom: 125%;
+      left: 50%;
+      margin-left: -75px;
+      width: 150px;
+      text-align: center;
+      font-size: 0.8em;
     }
 
-    .tipWrap:hover .tipText {
+    .tooltip:hover .tooltipText {
       visibility: visible;
-      opacity: 1;
     }
+
   </style>
 </head>
 
 <body>
 
 <header>
-  <!-- Dark mode checkbox -->
+  <h1>Jeremy Lockhart - Portfolio</h1>
+
   <label>
     <input type="checkbox" id="darkToggle">
     Dark Mode
   </label>
-
-  <h1>Jeremy Lockhart - Personal Portfolio</h1>
-  <p id="welcomeMsg">Welcome!</p>
 </header>
 
 <main>
 
-  <!-- ABOUT SECTION -->
-  <section id="about">
-    <h2>About</h2>
-    <p>
-      I am an IT professional and Cloud Engineer with experience in infrastructure and cybersecurity.
-    </p>
-  </section>
+<section id="about">
+  <h2>About</h2>
+  <p>This portfolio loads projects dynamically using JavaScript objects.</p>
+</section>
 
-  <!-- PROJECTS SECTION -->
-  <section id="projects">
-    <h2>Projects</h2>
-  </section>
+<section id="projects">
+  <h2>Projects</h2>
+  <div id="projectList"></div>
+</section>
 
-  <!-- CONTACT SECTION -->
-  <section id="contact">
-    <h2>Contact</h2>
+<section id="contact">
+  <h2>Contact</h2>
 
-    <form id="contactForm">
-      <label>
-        Name:
-        <input type="text" id="senderName">
-      </label>
-      <br><br>
+  <form id="contactForm">
+    <div>
+      <label for="fullName">Full Name:</label>
+      <input type="text" id="fullName">
+    </div>
 
-      <label>
-        Email:
-        <input type="email" id="senderEmail">
-      </label>
-      <br><br>
+    <div>
+      <label for="email">Email:</label>
+      <input type="email" id="email">
+    </div>
 
-      <label>
-        Message:
-        <br>
-        <textarea id="message" rows="5"></textarea>
-      </label>
-      <br><br>
+    <div>
+      <label for="message">Message:</label>
+      <textarea id="message"></textarea>
+    </div>
 
-      <!-- Tooltip wrapper -->
-      <span class="tipWrap">
-        <input type="submit" id="submitBtn" value="Submit">
-        <span class="tipText">Click to send your message!</span>
+    <div>
+      <span class="tooltip">
+        <button type="submit">Send Message</button>
+        <span class="tooltipText">This simulates sending a message</span>
       </span>
-    </form>
-  </section>
+    </div>
+  </form>
+
+  <p id="formStatus"></p>
+</section>
 
 </main>
 
-<!-- =========================
-     Welcome Modal HTML
-     ========================= -->
-<div id="welcomeModal" class="modalOverlay hidden">
-  <div class="modalBox">
-    <h2>Heads up</h2>
-    <p>This page is a work in progress.</p>
-    <button id="closeModalBtn" type="button">Close</button>
-  </div>
-</div>
-
-<!-- External JS file (matches the technique from the PDF) -->
 <script src="script.js"></script>
+
 </body>
 </html>

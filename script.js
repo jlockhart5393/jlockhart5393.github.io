@@ -1,174 +1,174 @@
 /*
-  Author: Jeremy Lockhart
+  Name: Jeremy Lockhart
   Date: 03-01-2026
   Purpose:
-    - Run the page’s JavaScript features (modal, tooltip behavior, dark mode, and form message)
+  - Create project objects
+  - Store them using sessionStorage
+  - Load and display them dynamically
+  - Handle contact form with message box
 */
 
 "use strict";
 
-/* =========================
-   Add a delayed notification
-   ========================= */
-function showNotifyBar() {
-  setTimeout(function () {
-    var note = document.createElement("div");
-    note.className = "notifyBar";
-    note.innerText = "This page updates dynamically using JavaScript.";
+/* Default project objects */
+function getDefaultProjects() {
+  return [
+    {
+      title: "Daily Water Tracker",
+      summary: "Android app that tracks daily water intake.",
+      imageUrl: "https://via.placeholder.com/60",
+      repoUrl: "https://github.com/jlockhart5393"
+    },
+    {
+      title: "Photo Gallery App",
+      summary: "Simple Android gallery with splash screen.",
+      imageUrl: "https://via.placeholder.com/60",
+      repoUrl: "https://github.com/jlockhart5393"
+    },
+    {
+      title: "Interactive Portfolio",
+      summary: "Web portfolio using JavaScript and storage.",
+      imageUrl: "https://via.placeholder.com/60",
+      repoUrl: "https://github.com/jlockhart5393"
+    }
+  ];
+}
 
-    document.body.insertBefore(note, document.body.firstChild);
+/* Load or save projects */
+function getProjects() {
+  var stored = sessionStorage.getItem("projects");
+
+  if (!stored) {
+    var defaults = getDefaultProjects();
+    sessionStorage.setItem("projects", JSON.stringify(defaults));
+    return defaults;
+  }
+
+  return JSON.parse(stored);
+}
+
+/* Render project cards */
+function renderProjects() {
+  var projects = getProjects();
+  var holder = document.getElementById("projectList");
+
+  holder.innerHTML = "";
+
+  var grid = document.createElement("div");
+  grid.className = "projectGrid";
+
+  for (var i = 0; i < projects.length; i++) {
+    var card = document.createElement("div");
+    card.className = "projectCard";
+
+    var img = document.createElement("img");
+    img.src = projects[i].imageUrl;
+
+    var title = document.createElement("h3");
+    title.innerText = projects[i].title;
+
+    var summary = document.createElement("p");
+    summary.innerText = projects[i].summary;
+
+    var link = document.createElement("a");
+    link.href = projects[i].repoUrl;
+    link.target = "_blank";
+    link.className = "projectLink";
+    link.innerText = "View Repository";
+
+    card.appendChild(img);
+    card.appendChild(title);
+    card.appendChild(summary);
+    card.appendChild(link);
+
+    grid.appendChild(card);
+  }
+
+  holder.appendChild(grid);
+}
+
+/* Dark mode toggle */
+function handleDarkToggle() {
+  var toggle = document.getElementById("darkToggle");
+
+  if (toggle.checked) {
+    document.body.className = "dark-mode";
+    localStorage.setItem("darkMode", "true");
+  } else {
+    document.body.className = "";
+    localStorage.setItem("darkMode", "false");
+  }
+}
+
+/* Load dark mode */
+function loadDarkMode() {
+  var saved = localStorage.getItem("darkMode");
+
+  if (saved === "true") {
+    document.body.className = "dark-mode";
+    document.getElementById("darkToggle").checked = true;
+  }
+}
+
+/* Contact form handler */
+function handleFormSubmit(e) {
+  e.preventDefault();
+
+  var name = document.getElementById("fullName").value;
+  var email = document.getElementById("email").value;
+  var message = document.getElementById("message").value;
+  var status = document.getElementById("formStatus");
+
+  if (name === "" || email === "" || message === "") {
+    status.innerText = "Please fill out all fields.";
+    return;
+  }
+
+  status.innerText = "Sending message...";
+
+  setTimeout(function () {
+    status.innerText = "Message sent successfully (demo only).";
+    document.getElementById("contactForm").reset();
   }, 1200);
 }
 
-/* =========================
-   Dynamically add content
-   ========================= */
-function addProjectContent() {
-  var projectsSection = document.getElementById("projects");
-
-  var newParagraph = document.createElement("p");
-  newParagraph.className = "highlightBox";
-  newParagraph.innerText =
-    "Recent Project: Daily Water Tracker (Android App). Built using Kotlin and Android Studio.";
-
-  projectsSection.appendChild(newParagraph);
-}
-
-/* =========================
-   Modify existing elements
-   ========================= */
-function updateExistingElements() {
-  var projectsHeading = document.querySelector("#projects h2");
-  projectsHeading.innerText = "Projects (Updated with JavaScript)";
-
-  var aboutSection = document.getElementById("about");
-  aboutSection.style.backgroundColor = "#f0f8ff";
-  aboutSection.style.padding = "12px";
-  aboutSection.style.borderRadius = "8px";
-}
-
-/* =========================
-   Welcome Modal (no prompt)
-   ========================= */
+/* Welcome modal */
 function showWelcomeModal() {
-  var modal = document.getElementById("welcomeModal");
-  modal.classList.remove("hidden");
+  var overlay = document.createElement("div");
+  overlay.className = "modalOverlay";
+
+  var box = document.createElement("div");
+  box.className = "modalBox";
+
+  var heading = document.createElement("h3");
+  heading.innerText = "Welcome!";
+
+  var text = document.createElement("p");
+  text.innerText = "Projects are loaded using sessionStorage and JSON.";
+
+  var button = document.createElement("button");
+  button.innerText = "Close";
+
+  button.onclick = function () {
+    document.body.removeChild(overlay);
+  };
+
+  box.appendChild(heading);
+  box.appendChild(text);
+  box.appendChild(button);
+  overlay.appendChild(box);
+
+  document.body.appendChild(overlay);
 }
 
-function closeWelcomeModal() {
-  var modal = document.getElementById("welcomeModal");
-  modal.classList.add("hidden");
-}
-
-/* =========================
-   Dark Mode (save preference)
-   ========================= */
-function applyDarkModeFromStorage() {
-  var darkToggle = document.getElementById("darkToggle");
-  var pref = localStorage.getItem("darkMode"); // "on" or "off"
-
-  if (pref === "on") {
-    document.body.classList.add("dark-mode");
-    darkToggle.checked = true;
-  }
-  else {
-    document.body.classList.remove("dark-mode");
-    darkToggle.checked = false;
-  }
-}
-
-function handleDarkToggleChange() {
-  var darkToggle = document.getElementById("darkToggle");
-
-  if (darkToggle.checked) {
-    document.body.classList.add("dark-mode");
-    localStorage.setItem("darkMode", "on");
-  }
-  else {
-    document.body.classList.remove("dark-mode");
-    localStorage.setItem("darkMode", "off");
-  }
-}
-
-/* =========================
-   Timed Form Submission
-   ========================= */
-function handleFormSubmit(evt) {
-  if (evt.preventDefault) {
-    evt.preventDefault();
-  }
-  else {
-    evt.returnValue = false;
-  }
-
-  var contactForm = document.getElementById("contactForm");
-
-  var statusMsg = document.getElementById("formStatus");
-  if (!statusMsg) {
-    statusMsg = document.createElement("p");
-    statusMsg.id = "formStatus";
-    contactForm.appendChild(statusMsg);
-  }
-
-  statusMsg.innerText = "Sending message...";
-
-  setTimeout(function () {
-    statusMsg.innerText = "Message sent successfully!";
-
-    document.getElementById("senderName").value = "";
-    document.getElementById("senderEmail").value = "";
-    document.getElementById("message").value = "";
-  }, 2500);
-}
-
-/* =========================
-   Event Listeners
-   ========================= */
-function createEventListeners() {
-  var closeBtn = document.getElementById("closeModalBtn");
-  var darkToggle = document.getElementById("darkToggle");
-  var contactForm = document.getElementById("contactForm");
-
-  if (closeBtn.addEventListener) {
-    closeBtn.addEventListener("click", closeWelcomeModal, false);
-  }
-  else if (closeBtn.attachEvent) {
-    closeBtn.attachEvent("onclick", closeWelcomeModal);
-  }
-
-  if (darkToggle.addEventListener) {
-    darkToggle.addEventListener("change", handleDarkToggleChange, false);
-  }
-  else if (darkToggle.attachEvent) {
-    darkToggle.attachEvent("onchange", handleDarkToggleChange);
-  }
-
-  if (contactForm.addEventListener) {
-    contactForm.addEventListener("submit", handleFormSubmit, false);
-  }
-  else if (contactForm.attachEvent) {
-    contactForm.attachEvent("onsubmit", handleFormSubmit);
-  }
-}
-
-/* =========================
-   Page Setup (on load)
-   ========================= */
+/* Setup page */
 function setUpPage() {
-  showNotifyBar();
-  addProjectContent();
-  updateExistingElements();
-
+  renderProjects();
+  loadDarkMode();
   showWelcomeModal();
 
-  applyDarkModeFromStorage();
-  createEventListeners();
+  document.getElementById("darkToggle").addEventListener("change", handleDarkToggle);
+  document.getElementById("contactForm").addEventListener("submit", handleFormSubmit);
 }
 
-/* Attach setUpPage on window load (same cross-browser style from the PDFs) */
-if (window.addEventListener) {
-  window.addEventListener("load", setUpPage, false);
-}
-else if (window.attachEvent) {
-  window.attachEvent("onload", setUpPage);
-}
+window.addEventListener("load", setUpPage);
